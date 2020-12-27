@@ -30,8 +30,9 @@ int Postfix_Calc(int *char_arr, int length)
 	while (LStack.stack_ptr != 0)
 	{
 		/*일반 숫자라면  Stack에 PUSH 한다.*/
-		if (SPeek(&LStack) != '*' && SPeek(&LStack) != '+'
-				&& SPeek(&LStack) != '-' && SPeek(&LStack) != '/')
+		if (SPeek(&LStack) != MULTI && SPeek(&LStack) != DIVID
+				&& SPeek(&LStack) !=PLUS && SPeek(&LStack) != MINUS)
+
 		{
 			SPush(&NStack, SPop(&LStack));
 		}
@@ -40,28 +41,28 @@ int Postfix_Calc(int *char_arr, int length)
 			/*연산 부호라면 다음과 같이 계산한다.*/
 			switch (SPop(&LStack))
 			{
-			case '*':
+			case MULTI:
 				operator_0 = SPop(&NStack);
 				operator_1 = SPop(&NStack);
 				result = operator_1 * operator_0;
 				SPush(&NStack, result);
 				break;
 
-			case '/':
+			case DIVID:
 				operator_0 = SPop(&NStack);
 				operator_1 = SPop(&NStack);
 				result = operator_1 / operator_0;
 				SPush(&NStack, result);
 				break;
 
-			case '+':
+			case PLUS:
 				operator_0 = SPop(&NStack);
 				operator_1 = SPop(&NStack);
 				result = operator_1 + operator_0;
 				SPush(&NStack, result);
 				break;
 
-			case '-':
+			case MINUS:
 				operator_0 = SPop(&NStack);
 				operator_1 = SPop(&NStack);
 				result = operator_1 - operator_0;
@@ -112,19 +113,53 @@ int calc_op_check(int num)
 	switch (num)
 	{
 	case '(':
+	case OPEN_BACKET:
 	case ')':
+	case CLOSE_BACKET:
 		return 1;
 
 	case '+':
+	case PLUS:
 	case '-':
+	case MINUS:
 		return 3;
 
 	case '*':
+	case MULTI:
 	case '/':
+	case DIVID:
 		return 5;
 
 	default:
 		return num;
+
+	}
+}
+
+void calc_op_change(int *addr_num)
+{
+	switch (*addr_num)
+	{
+	case '(':
+		*addr_num = OPEN_BACKET;
+		break;
+	case ')':
+		*addr_num = CLOSE_BACKET;
+		break;
+	case '+':
+		*addr_num = PLUS;
+		break;
+	case '-':
+		*addr_num = MINUS;
+		break;
+	case '*':
+		*addr_num = MULTI;
+		break;
+	case '/':
+		*addr_num = DIVID;
+		break;
+	default:
+		break;
 
 	}
 }
@@ -168,6 +203,7 @@ int* Postfix_func(int *char_arr, int len)
 		/* 연산 부호이고 현자 연산 스택에 저장된 값이 없으면  */
 		else if (Calc_Stack.stack_ptr == -1)
 		{
+			calc_op_change(&char_arr[arr]);
 			SPush(&Calc_Stack, char_arr[arr]);
 			arr++;
 		}
@@ -184,19 +220,19 @@ int* Postfix_func(int *char_arr, int len)
 			}
 
 			/* 그 다음 연산 스택에 집어 넣는다.*/
+			calc_op_change(&char_arr[arr]);
 			SPush(&Calc_Stack, char_arr[arr]);
 
 			/*집어 넣는 연산자가 닫는 괄호라면 */
-			if (char_arr[arr] == ')')
+			if (char_arr[arr] == CLOSE_BACKET)
 			{
 				/*제거 후 */
 				SPop(&Calc_Stack);
 
 				/* 여는 괄호가 나올 때 까지 연산자 스택에 있는 값들을 배열에 넣는다.*/
-				while (SPeek(&Calc_Stack) != '(')
+				while (SPeek(&Calc_Stack) != OPEN_BACKET)
 				{
 					calc_array[index++] = SPop(&Calc_Stack);
-
 				}
 
 				/* 여는 괄호 제거 */

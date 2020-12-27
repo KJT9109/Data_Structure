@@ -23,8 +23,8 @@ int main(void)
 	memset(normal_array, 0, ARRAY_SIZE);
 
 	char *calc_equal =
-//	{ "51-8/(3+4*2/8)*3+2" };
-			{"51-8/(3*4-4)-20"};
+	{ "51-8/(3+4*2/8)*3+2" };
+//			{"51-8/(3*4-4)-20"};
 	length = STRtoINT(calc_equal, normal_array);
 
 	Postfix_func(normal_array, length);
