@@ -11,6 +11,6 @@
 void PostfixToTree(BTreeNode *curNode, int *char_arr);
 BTData CalcOperator(BTData operator_0, BTData operator_1, int opCode);
 BTData CalcPostfixToTree(BTreeNode *bt);
-BTData ResultPostfixToTree(void);
+BTData ResultPostfixToTree(char *calc_equal);
 
 #endif /* CALCULATORTREE_H_ */

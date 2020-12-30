@@ -113,15 +113,17 @@ BTData CalcPostfixToTree(BTreeNode *bt)
 {
 	BTData LeftData, RightData;
 
+	/* Left 노드가 NULL 값이 아니고 data가 연산자 일 경우 숫자가 나올 때 까지 들어간다. */
 	if (bt->left != NULL && bt->left->data < 0)
 	{
 		CalcPostfixToTree(bt->left);
 	}
+	/* Right 노드가 NULL 값이 아니고 data가 연산자 일 경우 숫자가 나올 때 까지 들어간다. */
 	if (bt->right != NULL && bt->right->data < 0)
 	{
 		CalcPostfixToTree(bt->right);
 	}
-
+	/* 제일 바닥까지 왔으면 연산을 시작한다. */
 	if (bt->left != NULL && bt->right != NULL)
 	{
 		LeftData = GetData(bt->left);
@@ -131,22 +133,17 @@ BTData CalcPostfixToTree(BTreeNode *bt)
 		bt->data = CalcOperator(LeftData, RightData, bt->data);
 	}
 
+	/* 최종 결과 값을 Return 한다. */
 	return bt->left->data;
 }
 
-BTData ResultPostfixToTree(void)
+BTData ResultPostfixToTree(char *calc_equal)
 {
-
 	BTreeNode *RootNode = MakeBTreeNode();
 
 	int length = 0;
 	int normal_array[ARRAY_SIZE];
 	memset(normal_array, 0, ARRAY_SIZE);
-
-	char *calc_equal =
-	{ "1+2*3+4*5" };
-	//{ "51-8/(3+4*2/8)*3+2" };
-	//{"51-8/(3*4-4)-20"};
 
 	/* String 문자를 INT 형으로 변환 */
 	length = STRtoINT(calc_equal, normal_array);

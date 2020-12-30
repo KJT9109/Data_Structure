@@ -71,7 +71,7 @@ Data SPeek(Stack *pstack)
 {
 	if (sIsEmpty(pstack) < 0)
 	{
-		printf("Stack is Empty \r\n");
+
 		return -1;
 	}
 	else
