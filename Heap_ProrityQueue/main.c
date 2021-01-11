@@ -11,22 +11,29 @@
 
 HeapStruct HeapStructure;
 
+HData HeapSortArray[MAXIMUM_SIZE] = {0,};
+
 int main(void)
 {
-	printf("Start Heap Structure\r");
-	HeapInit(&HeapStructure);
+  printf("Start Heap Structure\r");
+  HeapInit(&HeapStructure);
 
-	HeapInsert(&HeapStructure, 'B');
-	HeapInsert(&HeapStructure, 'D');
-	HeapInsert(&HeapStructure, 'G');
-	HeapInsert(&HeapStructure, 'E');
-	HeapInsert(&HeapStructure, 'C');
-	HeapInsert(&HeapStructure, 'A');
-	HeapInsert(&HeapStructure, 'F');
+  HeapInsert(&HeapStructure, 'B');
+  HeapInsert(&HeapStructure, 'D');
+  HeapInsert(&HeapStructure, 'G');
+  HeapInsert(&HeapStructure, 'E');
+  HeapInsert(&HeapStructure, 'C');
+  HeapInsert(&HeapStructure, 'A');
+  HeapInsert(&HeapStructure, 'F');
+  HeapInsert(&HeapStructure, 'F');
+  HeapInsert(&HeapStructure, 'Z');
+  HeapInsert(&HeapStructure, 'N');
+  HeapInsert(&HeapStructure, 'M');
 
-	HeapDelete(&HeapStructure, 'A');
-	HeapDelete(&HeapStructure, 'B');
 
+  HeapSort(&HeapStructure, HeapSortArray);
+
+  printf("Finish Heap Structure\r");
 
 }
 

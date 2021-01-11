@@ -12,7 +12,9 @@
 
 void HeapInit(HeapStruct *useHstr);
 void HeapInsert(HeapStruct *useHstr, HData inData);
-HData HeapCount(HeapStruct useHstr);
 int HeapDelete(HeapStruct *useHstr, HData inData);
+HData HeapCount(HeapStruct useHstr);
+HData HeapTakeOut(HeapStruct *useHstr);
+void HeapSort(HeapStruct *useHstr, HData *contArr);
 
 #endif /* HEAPAPI_H_ */
