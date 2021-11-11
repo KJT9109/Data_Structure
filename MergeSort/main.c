@@ -9,7 +9,7 @@
 #include "string.h"
 #include "mergeSort.h"
 
-int array[] = {1, 2, 3, 4, 5, 6, 7, 8};
+int array[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
 int comp(int val1, int val2)
 {

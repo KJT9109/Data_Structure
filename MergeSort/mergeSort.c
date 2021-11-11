@@ -10,7 +10,7 @@
 #include "stdlib.h"
 #include "mergeSort.h"
 
-
+#define debug 1
 int insertBurst(int startIdx, int finIdx, int *out_arr, int *in_arr)
 {
 	if(startIdx >= finIdx)
@@ -36,11 +36,9 @@ int mergeComp(int *arr, int size, compFunc comp)
 	int startIdxFin = compIdx;
 	int localIdx = 0;
 
-#if 1
-	if(*arr == 10)
-	{
-		printf("Debug code %d \n", *arr);
-	}
+#if debug
+	printf("size = %d \r", size);
+	printf("compIdx = %d \r", compIdx);
 #endif
 
 	while((startIdx < startIdxFin) && (compIdx < compIdxFin))
@@ -66,6 +64,14 @@ int mergeComp(int *arr, int size, compFunc comp)
 	}
 
 	memcpy(arr, local_arr, size * sizeof(int));
+#if debug
+    printf("Debug array \r");
+    for (int i = 0; i < size; i++)
+	{
+		printf(" %d", arr[i]);
+	}
+    printf("\r");
+#endif
 	free(local_arr);
 
 	return 0;
