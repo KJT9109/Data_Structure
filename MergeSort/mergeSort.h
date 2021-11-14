@@ -10,7 +10,6 @@
 
 typedef int (*compFunc)(int val1, int val2);
 
-int mergeSort(int arr[], int size, compFunc comp);
-int TestFuncP(compFunc comp);
+void mergeSort(int *arr, int startIdx, int endIdx, compFunc comp);
 
 #endif /* MERGESORT_H_ */
