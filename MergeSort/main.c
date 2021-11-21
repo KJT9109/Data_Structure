@@ -18,12 +18,12 @@ int comp(int val1, int val2)
 {
     int temp = 0;
 
-    return temp = val1 > val2 ? val1 : val2;
+    return temp = val1 < val2 ? val1 : val2;
 }
 
 int main(void)
 {
-    printf("Start Merge Sort \r");
+    printf("Start Merge Sort \r\n");
 
     printf("Before array value: ");
     for (int i = 0; i < sizeof(array) / sizeof(int); i++)

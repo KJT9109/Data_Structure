@@ -12,10 +12,12 @@
 #include "stdlib.h"
 #include "mergeSort.h"
 
+#define DEBUG 0
+#define TRACE 1
+
 int insertBurst(int startIdx, int finIdx, int *out_arr, int *in_arr)
 {
     int _localIdx = 0;
-
 
     while(startIdx <= finIdx)
     {
@@ -76,9 +78,10 @@ int mergeComp(int *arr, int startIdx, int midIdx, int endIdx, compFunc comp)
 
 void mergeSort(int *arr, int startIdx, int endIdx, compFunc comp)
 {
+    TR_FUNC(TRACE);
     int midIdx = (startIdx + endIdx) / 2;
 
-#if LOG    
+#if DEBUG    
     printf("array value: ");
     for (int i = startIdx; i <=endIdx; i++)
     {
@@ -95,8 +98,6 @@ void mergeSort(int *arr, int startIdx, int endIdx, compFunc comp)
 	mergeComp(arr, startIdx, midIdx+1, endIdx, comp);
     }
 }
-
-
 
 
 
