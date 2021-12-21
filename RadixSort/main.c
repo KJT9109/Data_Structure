@@ -8,6 +8,7 @@
 #include "stdio.h"
 #include "stdint.h"
 #include "radixSort.h"
+#include "linkedList.h"
 
 #define NOTATION 10
 
@@ -23,9 +24,25 @@ int main(void)
 	printf(" %d",array[i]);
     }
 
-    radixSort(array, NOTATION);
-
     printf("\r\n");
+
+    int array_len = sizeof(array) / sizeof(Data);
+
+    radixSort(array, array_len, NOTATION);
+#if 0  
+    Node *head = linkedListInit();
+    linkedListInsert(head, 1);
+    linkedListInsert(head, 2);
+    linkedListInsert(head, 3);
+    linkedListInsert(head, 4);
+
+   while (head->next != NULL)
+   {
+      printf("linkedList Data is : %d \r\n", head->data); 
+      head = head->next;
+   }
+    printf("\r\n");
+#endif
 
     return 0;
 }

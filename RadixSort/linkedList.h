@@ -1,19 +1,19 @@
 /*
  * linkedList.h
  *
- *  Created on: 2021. 12.06.
+ *  Created on: 2021. 12.06
  *      Author: Jitae Kim
  */
+
 #ifndef LINKEDLIST_H_
 #define LINKEDLIST_H_
 
-typedef int Data;
+typedef struct _Node {
+    struct _Node *next;
+    int data;
+}Node;
 
-
-struct Node { 
-    Data data;
-    struct Node *next;
-
-};
+Node *linkedListInit();
+int linkedListInsert(Node *head, int data);
 
 #endif

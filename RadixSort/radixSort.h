@@ -9,6 +9,7 @@
 
 #include "linkedList.h"
 
+typedef int Data;
 typedef int Array;
 typedef int Notation;
 
@@ -16,6 +17,6 @@ typedef int Notation;
     if(_value_)            \
     printf("TRACE FUNC: QuickSort\r\n")
 
-int radixSort(Data *arr, Notation notation);
+int radixSort(Data *arr, int len, Notation notation);
 
 #endif

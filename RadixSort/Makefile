@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -g -Wall
 TARGET = test
-OBJECT = main.o radixSort.o
+OBJECT = main.o radixSort.o linkedList.o
 
 all : $(TARGET)
 $(TARGET): $(OBJECT)

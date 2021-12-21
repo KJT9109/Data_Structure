@@ -10,7 +10,7 @@
 #include "quickSort.h"
 
 #define DEBUG 0
-#define TRACE 1
+#define TRACE 0
 
 void _changeData(Data *Arg_1, Data *Arg_2)
 {
