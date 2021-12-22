@@ -17,25 +17,21 @@
 int arrayInsert(Node *arr, Data data)
 {
     TR_FUNC(TRACE);
-    //TODO: 해당 Data에 맞는 bucket에 데이터를 삽입한다.
-    //만약 데이터가 있을시 링크드 리스트로 만들어 계속 삽입한다.
     linkedListInsert(arr, data);
 
     return 0;
 }
 
-int arrayGet(Array *arr)
+int arrayGet(Node *arr, bool data_del)
 {
     TR_FUNC(TRACE);
-    //TODO: Return Data 후 데이터 삭제
-    return 0;
+    return linkedListGet(arr, data_del);
 }
 
-//TODO: 정렬해야 할 자릿수도 포함??
 int radixSort(Data arr[], int len,  Notation notation)
 {
     TR_FUNC(TRACE);
-
+    int array_start = 0;
     Node *_bucket[notation];
    // int _bucket_size = sizeof(Node) * notation;
     Data *_local_arr = arr; 
@@ -45,19 +41,23 @@ int radixSort(Data arr[], int len,  Notation notation)
 	_bucket[index] = linkedListInit();
     }
     
+    // array의 데이터를 index에 맞게 삽입한다.
     for (int index = 0; index < len; index++) 
     {
 	Data _1st_val = _local_arr[index] % 10;
 	arrayInsert(_bucket[_1st_val], _local_arr[index]);
     }	
 
+    for (int bucket_index = 0; bucket_index < len; bucket_index++)
+    {
+	while (arrayGet(_bucket[bucket_index], false) != 0xdeadbeef)
+		arr[array_start++] = arrayGet(_bucket[bucket_index], true);
+    }
 
-    //TODO: arr index 처음으로
 
-	//TODO: 데이터를 다시 꺼냄
+    //TODO: 데이터를 다시 꺼냄
 	
     return 0;
-
 
 }
 

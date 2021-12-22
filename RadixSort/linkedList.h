@@ -8,6 +8,8 @@
 #ifndef LINKEDLIST_H_
 #define LINKEDLIST_H_
 
+typedef enum _bool { false, true }bool;
+
 typedef struct _Node {
     struct _Node *next;
     int data;
@@ -15,5 +17,6 @@ typedef struct _Node {
 
 Node *linkedListInit();
 int linkedListInsert(Node *head, int data);
+int linkedListGet(Node *head, bool data_del);
 
 #endif
