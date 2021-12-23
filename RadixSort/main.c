@@ -44,6 +44,14 @@ int main(void)
     printf("\r\n");
 #endif
 
+    printf("End Radix Sort\r\n");
+
+    for (int i = 0; i <= (sizeof(array) / sizeof(int)) - 1; i++)
+    {
+	printf(" %d",array[i]);
+    }
+
+    printf("\r\n");
     return 0;
 }
 

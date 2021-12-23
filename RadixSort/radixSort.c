@@ -22,11 +22,44 @@ int arrayInsert(Node *arr, Data data)
     return 0;
 }
 
-int arrayGet(Node *arr, bool data_del)
+Data arrayGet(Node *arr, bool data_del)
 {
     TR_FUNC(TRACE);
     return linkedListGet(arr, data_del);
 }
+
+Data bucketIndex(int digit, Data data)
+{
+    Data ret = 0;
+    Data tmp1 = 0;
+    Data tmp2 = 0;
+    
+    switch (digit)
+    {
+	case 1:
+	    ret = data % 10;
+	    break;
+	case 2:
+	    tmp1 = data % 10; 
+	    tmp2 = (data - tmp1) / 10; 
+	    ret = tmp2 % 10;
+	    printf("data:%d, tmp1:%d, tmp2:%d ret:%d\r\n", data, tmp1, tmp2, ret);
+	    break;
+	case 3:
+
+	    tmp1 = data % 100; 
+	    tmp2 = (data - tmp1) / 100;
+	    ret = tmp2;
+	    printf("data:%d, tmp1:%d, tmp2:%d \r\n", data, tmp1, tmp2);
+	    break;
+
+	default:
+	    break;
+    }
+
+    return ret;
+}
+
 
 int radixSort(Data arr[], int len,  Notation notation)
 {
@@ -41,21 +74,22 @@ int radixSort(Data arr[], int len,  Notation notation)
 	_bucket[index] = linkedListInit();
     }
     
-    // array의 데이터를 index에 맞게 삽입한다.
-    for (int index = 0; index < len; index++) 
+    for (int digit = 1; digit < 3; digit++)
     {
-	Data _1st_val = _local_arr[index] % 10;
-	arrayInsert(_bucket[_1st_val], _local_arr[index]);
-    }	
+	// array의 데이터를 index에 맞게 삽입한다.
+	for (int index = 0; index < len; index++) 
+	{
+	    Data insert_index = bucketIndex(digit, _local_arr[index]);
+	    arrayInsert(_bucket[insert_index], _local_arr[index]);
+	}
 
-    for (int bucket_index = 0; bucket_index < len; bucket_index++)
-    {
-	while (arrayGet(_bucket[bucket_index], false) != 0xdeadbeef)
+	// array의 데이터를 다시 꺼낸다. 
+	for (int bucket_index = 0; bucket_index < len; bucket_index++)
+	{
+	    while (arrayGet(_bucket[bucket_index], false) != 0xdeadbeef)
 		arr[array_start++] = arrayGet(_bucket[bucket_index], true);
+	}
     }
-
-
-    //TODO: 데이터를 다시 꺼냄
 	
     return 0;
 
