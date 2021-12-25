@@ -17,6 +17,6 @@ typedef struct _Node {
 
 Node *linkedListInit();
 int linkedListInsert(Node *head, int data);
-int linkedListGet(Node *head, bool data_del);
-
+int linkedListGet_LIFO(Node *head, bool data_del);
+int linkeListGet_FIFO(Node *head, bool data_del);
 #endif

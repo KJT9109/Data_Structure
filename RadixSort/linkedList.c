@@ -40,7 +40,7 @@ int linkedListInsert(Node *head, int data)
     return 0;
 }
 
-int linkedListGet(Node *head, bool data_del)
+int linkedListGet_LIFO(Node *head, bool data_del)
 {
     Node *_local = head;
     Node *_before_node = NULL;
@@ -59,6 +59,29 @@ int linkedListGet(Node *head, bool data_del)
 	if (_before_node)
 	    _before_node->next = NULL;
 
+	free(_local);
+    }
+
+    return ret;
+}
+
+int linkeListGet_FIFO(Node *head, bool data_del)
+{
+    Node *_local = head;
+    int ret = 0;
+
+    ret = head->data;
+
+    if (ret == 0xdeadbeef && _local->next != NULL)
+    {
+	_local = _local->next;
+	ret = _local->data;
+    }
+
+    if (data_del == true && _local->data != 0xdeadbeef)
+    {
+	head->next = _local->next;
+	
 	free(_local);
     }
 

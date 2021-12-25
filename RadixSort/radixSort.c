@@ -14,19 +14,6 @@
 #define DEBUG 0
 #define TRACE 0 
 
-int arrayInsert(Node *arr, Data data)
-{
-    TR_FUNC(TRACE);
-    linkedListInsert(arr, data);
-
-    return 0;
-}
-
-Data arrayGet(Node *arr, bool data_del)
-{
-    TR_FUNC(TRACE);
-    return linkedListGet(arr, data_del);
-}
 
 Data bucketIndex(int digit, Data data)
 {
@@ -73,25 +60,28 @@ int radixSort(Data arr[], int len,  Notation notation)
     {
 	_bucket[index] = linkedListInit();
     }
-    
-    for (int digit = 1; digit < 3; digit++)
+ 
+    for (int digit = 1; digit < 4; digit++)
     {
+	array_start = 0;
 	// array의 데이터를 index에 맞게 삽입한다.
 	for (int index = 0; index < len; index++) 
 	{
 	    Data insert_index = bucketIndex(digit, _local_arr[index]);
-	    arrayInsert(_bucket[insert_index], _local_arr[index]);
+	    linkedListInsert(_bucket[insert_index], _local_arr[index]);
 	}
 
 	// array의 데이터를 다시 꺼낸다. 
 	for (int bucket_index = 0; bucket_index < len; bucket_index++)
 	{
-	    while (arrayGet(_bucket[bucket_index], false) != 0xdeadbeef)
-		arr[array_start++] = arrayGet(_bucket[bucket_index], true);
+	    while (linkeListGet_FIFO(_bucket[bucket_index], false) != 0xdeadbeef)
+		arr[array_start++] = linkeListGet_FIFO(_bucket[bucket_index], true);
 	}
     }
 	
     return 0;
 
 }
+
+
 
