@@ -15,7 +15,7 @@ int main(void)
 {
     printf("Binary Tree !! \r\n");
 
-    BTreeNode * root = MakeBTreeNode();
+    BTreeNode *root = MakeBTreeNode();
 
     for (int idx = 0; idx < (sizeof(array) / sizeof(int)); idx++)
     {
@@ -31,6 +31,8 @@ int main(void)
     else
 	printf("findData: %d \r\n", findNode->data);
 
+    BTData test = BTreeDelete(root, 25);
+    printf("Deleted Data: %d \r\n", test);
     
     return 0;
 }

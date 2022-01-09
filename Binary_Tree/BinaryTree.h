@@ -33,5 +33,5 @@ void MakeRightSubTree(BTreeNode *main, BTreeNode *sub);
 
 void BTreeInsert(BTreeNode *root, BTData data);
 BTreeNode *BTreeSearch(BTreeNode *root, BTData findData);
-
+BTData BTreeDelete(BTreeNode *root, BTData findData);
 #endif
