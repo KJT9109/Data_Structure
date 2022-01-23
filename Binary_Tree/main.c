@@ -9,7 +9,7 @@
 #include "string.h"
 #include "BinaryTree.h"
 
-int array[] = {17, 9, 25, 11, 29, 10, 22};
+int array[] = {17, 9, 25, 11, 29, 10, 22, 18, 21};
 
 int main(void)
 {
@@ -31,8 +31,7 @@ int main(void)
     else
 	printf("findData: %d \r\n", findNode->data);
 
-    BTData test = BTreeDelete(root, 25);
-    printf("Deleted Data: %d \r\n", test);
+    BTreeDelete(root, 25);
     
     return 0;
 }

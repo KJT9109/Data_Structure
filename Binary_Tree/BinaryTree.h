@@ -26,7 +26,7 @@ void SetData(BTreeNode *bt, BTData data);
 BTreeNode* GetLeftSubTree(BTreeNode *bt);
 BTreeNode* GetRightSubTree(BTreeNode *bt);
 
-void DeleteTree(BTreeNode *bt);
+int DeleteTree(BTreeNode *bt);
 void MakeLeftSubTree(BTreeNode *main, BTreeNode *sub);
 void MakeRightSubTree(BTreeNode *main, BTreeNode *sub);
 
