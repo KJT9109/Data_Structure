@@ -41,9 +41,9 @@ static int AVL_CheckRotation(BTreeNode *rootNode)
     if (diff_val < 2)
 	return NOT_ROTATION;
     else if (right_val > left_val)
-	return NEED_RX_ROTAION;
+	return NEED_RX_ROTATION;
     else
-	return NEED_LX_ROTAION;
+	return NEED_LX_ROTATION;
 
     return ERROR_RETURN;
 
@@ -54,21 +54,84 @@ static int AVL_CheckSecondRotation(BTreeNode *rootNode)
     TR_FUNC(TRACE);
 
     if (AVL_CheckDepth(rootNode->left)) 
-	return NEED_XL_ROTAION;
+	return NEED_XL_ROTATION;
     else if (AVL_CheckDepth(rootNode->right))
-	return NEED_XR_ROTAION;
+	return NEED_XR_ROTATION;
 
     return NOT_ROTATION;
 }
 
 static int AVL_ChangeRR(BTreeNode **root, int second_result)
 {
+    
+    BTreeNode **returnRoot = root;
+    BTreeNode *checkRoot = (*root)->right; 
+    BTreeNode *originRoot = *root;
+
+    if (!(checkRoot)) {
+	printf("ERROR CODE #0 \r\n");
+	return -1;
+    } else if (second_result == NEED_XR_ROTATION) {
+	/* == Change ReBalance == */
+	BTreeNode *newRoot = (*root)->right; 
+
+	originRoot->right = newRoot->left;
+	newRoot->left = originRoot;
+	*returnRoot = newRoot;
+    } else if (second_result == NEED_XL_ROTATION) {
+	/* == Change R -> L == */
+	BTreeNode *originPNode = originRoot->right;
+	BTreeNode *originCNode = originPNode->left;
+	BTreeNode *mvNode = originCNode->right;
+
+	originRoot->right = originCNode;
+	originCNode->right = originPNode;
+	originPNode->left = mvNode;
+
+	/* == Change ReBalance == */
+	BTreeNode *newRoot = (*root)->right; 
+
+	originRoot->right = newRoot->left;
+	newRoot->left = originRoot;
+	*returnRoot = newRoot;
+    }
 
     return 0;
 }
 
 static int AVL_ChangeLL(BTreeNode **root, int second_result)
 {
+    BTreeNode **returnRoot = root;
+    BTreeNode *originRoot = *root;
+    BTreeNode *checkRoot = (*root)->left; 
+
+    if (!(checkRoot)) {
+	printf("ERROR CODE #0 \r\n");
+	return -1;
+    } else if (second_result == NEED_XL_ROTATION) {
+	/* == Change ReBalance == */
+	BTreeNode *newRoot = (*root)->left; 
+
+	originRoot->left = newRoot->right;
+	newRoot->right = originRoot;
+	*returnRoot = newRoot;
+    } else if (second_result == NEED_XR_ROTATION) {
+	/* == Change L -> R == */
+	BTreeNode *originPNode = originRoot->left;
+	BTreeNode *originCNode = originPNode->right;
+	BTreeNode *mvNode = originCNode->left;
+
+	originRoot->left = originCNode;
+	originCNode->left = originPNode;
+	originPNode->right = mvNode;
+
+	/* == Change ReBalance == */
+	BTreeNode *newRoot = (*root)->left; 
+
+	originRoot->left = newRoot->right;
+	newRoot->right = originRoot;
+	*returnRoot = newRoot;
+    }
 
     return 0;
 }
@@ -79,16 +142,15 @@ static int AVL_Balance(BTreeNode **root)
 
     int result_1 = AVL_CheckRotation(*root);
 
-    if (result_1 == NEED_RX_ROTAION) {
+    if (result_1 == NEED_RX_ROTATION) {
 	printf("RX ROTATION \r\n");
 	AVL_ChangeRR(root, AVL_CheckSecondRotation((*root)->right));
-    } else if (result_1 == NEED_LX_ROTAION) {
+    } else if (result_1 == NEED_LX_ROTATION) {
 	printf("LX ROTATION \r\n");
 	AVL_ChangeLL(root, AVL_CheckSecondRotation((*root)->left));
     } else {
 	printf("NOT ROTATION \r\n");
     }
-
 
     return 0;
 }

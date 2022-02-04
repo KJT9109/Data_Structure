@@ -11,8 +11,8 @@
 #include "AVLTree.h"
 
 //int array[] = {17, 9, 25, 11, 29, 10, 22, 18, 21};
-int array[] = {22, 15, 18, 17};
-
+int array[] = {22, 15, 18, 17, 21, 10};
+//int array[] = {22, 15, 13, 11};
 
 int main(void)
 {
@@ -20,7 +20,7 @@ int main(void)
 
     BTreeNode *root = MakeBTreeNode();
    
-    for (int idx = 0; idx < (sizeof(array) / sizeof(int)); idx++)
+    for (int idx = 0; idx <= (sizeof(array) / sizeof(int)); idx++)
     {
 	printf("Insert Data: %d \r\n", array[idx]);
 	AVLTreeInsert(&root, array[idx]);

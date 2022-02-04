@@ -2,10 +2,10 @@
 #ifndef __AVLTREE_H__
 #define __AVLTREE_H__
 
-#define NEED_RX_ROTAION 0
-#define NEED_LX_ROTAION 1
-#define NEED_XR_ROTAION 2  
-#define NEED_XL_ROTAION 3
+#define NEED_RX_ROTATION 0
+#define NEED_LX_ROTATION 1
+#define NEED_XR_ROTATION 2  
+#define NEED_XL_ROTATION 3
 #define NOT_ROTATION -1
 #define ERROR_RETURN -2
 
