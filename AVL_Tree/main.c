@@ -11,7 +11,7 @@
 #include "AVLTree.h"
 
 //int array[] = {17, 9, 25, 11, 29, 10, 22, 18, 21};
-int array[] = {17, 15, 13, 12, 11, 19};
+int array[] = {22, 15, 18, 17};
 
 
 int main(void)
