@@ -69,7 +69,6 @@ static int AVL_ChangeRR(BTreeNode **root, int second_result)
     BTreeNode *originRoot = *root;
 
     if (!(checkRoot)) {
-	printf("ERROR CODE #0 \r\n");
 	return -1;
     } else if (second_result == NEED_XR_ROTATION) {
 	/* == Change ReBalance == */
@@ -106,7 +105,6 @@ static int AVL_ChangeLL(BTreeNode **root, int second_result)
     BTreeNode *checkRoot = (*root)->left; 
 
     if (!(checkRoot)) {
-	printf("ERROR CODE #0 \r\n");
 	return -1;
     } else if (second_result == NEED_XL_ROTATION) {
 	/* == Change ReBalance == */
