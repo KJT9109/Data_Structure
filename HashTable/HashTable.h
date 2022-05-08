@@ -1,6 +1,7 @@
 #ifndef __HASHTABLE_H__
 #define __HASHTABLE_H__
 
+#define TABLE_SIZE 100
 
 #define TR_FUNC(_value_)  \
     if(_value_)            \
@@ -18,12 +19,14 @@ typedef struct _hashKey
 typedef struct _hashTable
 {
     /* == hash table member == */
-    void   **slot_pp;
+    void **slot_pp;
 
     int (*keyData)(void *arg_p);
     int (*insert)(struct _hashTable *ht, void *data_p);
     int (*remove)(struct _hashTable *ht, void *data_p);
     int (*search)(struct _hashTable *ht, HashKey *key_val_p);
+
+    int (*makeKey)(struct _hashTable *ht, int val);
 
 } HashTable;
 

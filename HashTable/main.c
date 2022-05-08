@@ -18,8 +18,10 @@ int main(void)
 
     test = HashTableInit(Person_keyData);
     Person *hyojin = Person_new((char *)"Park HyoJin", (char *)"01012345678", 172);
+    Person *jitae = Person_new((char *)"Kim JiTae", (char *)"01012345678", 173);
 
     test->insert(test, (void *)hyojin);
+    test->insert(test, (void *)jitae);
 
     return 0;
 }
