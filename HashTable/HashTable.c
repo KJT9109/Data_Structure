@@ -10,26 +10,33 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+
 #define TRACE 0
 
 static int HashTableInsert_Func(HashTable *ht, void *data_p)
 {
     TR_FUNC(TRACE);
+
+    int err = 0;
+
     int key_resource;
     int hash_key;
      /* get resource for make hash key */
     if ((key_resource = ht->keyData(data_p)) < 0) {
-	return -1;
+        ERR_SET_OUT(err, EINVAL);
+	return err;
 	/* get Hash Key */
     } else if ((hash_key = ht->makeKey(ht, key_resource)) < 0) {
-	return -2;
+        ERR_SET_OUT(err, EINVAL);
+        return err;
     } else {
-	if (!(ht->slot_pp)) {
-	    return -3;
-	    /* Insert Work */
-	} else if (!(ht->slot_pp[hash_key])) {
-	    ht->slot_pp[hash_key] = data_p;
-	}
+        if (!(ht->slot_pp)) {
+            ERR_SET_OUT(err, ENOMEM);
+            return err;
+            /* Insert Work */
+        } else if (!(ht->slot_pp[hash_key])) {
+            ht->slot_pp[hash_key] = data_p;
+        }
     }
 
     return 0;
@@ -61,8 +68,11 @@ HashTable *HashTableInit(int (*data_func)(void *arg_p))
     TR_FUNC(TRACE);
 
     HashTable *ret = (HashTable *)malloc(sizeof(HashTable));
-    ret->slot_pp = (void **)malloc(sizeof(int) * TABLE_SIZE);
-    memset(ret->slot_pp, 0, sizeof(int) * TABLE_SIZE);
+    ret->slot_pp = (void **)malloc(sizeof(void*) * TABLE_SIZE);
+
+    for (int index = 0; index < TABLE_SIZE; index++) {
+        ret->slot_pp[index] = (void *)NULL;
+    }
 
     ret->keyData = data_func;
     ret->insert = HashTableInsert_Func;
