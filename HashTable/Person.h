@@ -9,8 +9,8 @@ typedef struct _person
 
 } Person;
 
-
 Person *Person_new(char *name, char *phone, int height);
 int Person_keyData(void *arg_p);
+int Person_del(void *arg_p);
 
 #endif
