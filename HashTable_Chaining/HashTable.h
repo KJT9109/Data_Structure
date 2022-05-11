@@ -3,10 +3,24 @@
 
 #define TABLE_SIZE 100
 
+/* TODO: Change Hash Key */ 
+typedef struct _hashKey
+{
+    int key;
+    int index;
+
+} HashKey;
+
+typedef struct _storage
+{
+    void *mem_slot_p;
+    struct _dataList *next;
+} Storage;
+
 typedef struct _hashTable
 {
     /* == hash table member == */
-    void **slot_pp;
+    Storage *data_strge_p;
     /* == hash table work func == */
     int (*insert)(struct _hashTable *ht, void *data_p);
     int (*remove)(struct _hashTable *ht, int key_val);

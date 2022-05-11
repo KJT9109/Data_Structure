@@ -34,12 +34,14 @@ static int HashTableInsert_Func(HashTable *ht, void *data_p)
         ERR_SET_OUT(err, EINVAL);
         return -err;
     } else {
-        if (!(ht->slot_pp)) {
+        if (!(&(ht->data_strge_p[hash_key]))) {
             ERR_SET_OUT(err, EINVAL);
             return -err;
-        } else if (!(ht->slot_pp[hash_key])) {
+        } else if (!(ht->data_strge_p[hash_key].mem_slot_p)) {
             /* Insert Data */
-            ht->slot_pp[hash_key] = data_p;
+            ht->data_strge_p[hash_key].mem_slot_p = data_p;
+        } else {
+            /* TODO: need to Chaining code */
         }
     }
 
@@ -52,15 +54,16 @@ static int HashTableDel_Func(HashTable *ht, int hash_key)
 
     int err = 0;
 
-    if (!(ht) || !(ht->slot_pp[hash_key])) {
+    if (!(ht) || !(&(ht->data_strge_p[hash_key]))) {
         ERR_SET_OUT(err, EINVAL);
         return err;
     }
 
-    if ((ht->delData(ht->slot_pp[hash_key])) < 0) {
+    if ((ht->delData(ht->data_strge_p[hash_key].mem_slot_p)) < 0) {
         ERR_SET_OUT(err, EINVAL);
     } else {
-        ht->slot_pp[hash_key] = NULL;
+        /* TODO: Need to Chaing code */
+        ht->data_strge_p[hash_key].mem_slot_p = NULL;
     }
 
     return err;
@@ -78,8 +81,8 @@ static void **HashTableGet_Func(HashTable *ht, int key_val)
         return NULL;
     }
 
-    if (!(ret = &(ht->slot_pp[key_val])) 
-                || !(ht->slot_pp[key_val])) {
+    if (!(ret = &(ht->data_strge_p[key_val].mem_slot_p)) 
+                || !(ht->data_strge_p[key_val].mem_slot_p)) {
         ERR_SET_OUT(err, EINVAL);
     }
 
@@ -99,11 +102,8 @@ HashTable *HashTableInit(int (*getSrc_func)(void *arg_p),
     TR_FUNC(TRACE);
 
     HashTable *ret = (HashTable *)malloc(sizeof(HashTable));
-    ret->slot_pp = (void **)malloc(sizeof(void *) * TABLE_SIZE);
+    ret->data_strge_p = (Storage *)calloc(TABLE_SIZE, sizeof(Storage));
 
-    for (int index = 0; index < TABLE_SIZE; index++) {
-        ret->slot_pp[index] = (void *)NULL;
-    }
     /* Hash Table Work Func */
     ret->insert = HashTableInsert_Func;
     ret->remove = HashTableDel_Func;
