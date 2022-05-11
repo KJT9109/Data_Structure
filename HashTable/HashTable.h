@@ -3,13 +3,6 @@
 
 #define TABLE_SIZE 100
 
-typedef struct _hashKey
-{
-    int key;
-    int password;
-
-} HashKey;
-
 typedef struct _hashTable
 {
     /* == hash table member == */
