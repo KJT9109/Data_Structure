@@ -13,33 +13,33 @@
 
 #define TRACE 0
 
-static int HashTableInsert_Func(HashTable *ht, void *data_p)
+static HashKey *HashTableInsert_Func(HashTable *ht_p, void *data_p)
 {
     TR_FUNC(TRACE);
 
     int err = 0;
     int key_src;
-    int hash_key;
+    HashKey hash_key;
 
-    if (!(ht) || !(data_p)) {
+    if (!(ht_p) || !(data_p)) {
         ERR_SET_OUT(err, ENOMEM);
         return -err;
     }
     /* get resource for make hash key */
-    if ((key_src = ht->keySrc(data_p)) < 0) {
+    if ((hash_key.value = ht_p->keySrc(data_p)) < 0) {
         ERR_SET_OUT(err, EINVAL);
         return -err;
         /* get Hash Key */
-    } else if ((hash_key = ht->makeKey(ht, key_src)) < 0) {
+    } else if ((hash_key.value = ht_p->makeKey(ht_p, key_src)) < 0) {
         ERR_SET_OUT(err, EINVAL);
         return -err;
     } else {
-        if (!(&(ht->data_strge_p[hash_key]))) {
+        if (!(&(ht_p->data_strge_p[hash_key.value]))) {
             ERR_SET_OUT(err, EINVAL);
             return -err;
-        } else if (!(ht->data_strge_p[hash_key].mem_slot_p)) {
+        } else if (!(ht_p->data_strge_p[hash_key.value].mem_slot_p)) {
             /* Insert Data */
-            ht->data_strge_p[hash_key].mem_slot_p = data_p;
+            ht_p->data_strge_p[hash_key.value].mem_slot_p = data_p;
         } else {
             /* TODO: need to Chaining code */
         }
@@ -48,48 +48,48 @@ static int HashTableInsert_Func(HashTable *ht, void *data_p)
     return hash_key;
 }
 
-static int HashTableDel_Func(HashTable *ht, int hash_key)
+static int HashTableDel_Func(HashTable *ht_p, HashKey *hash_key_p)
 {
     TR_FUNC(TRACE);
 
     int err = 0;
 
-    if (!(ht) || !(&(ht->data_strge_p[hash_key]))) {
+    if (!(ht_p) || !(&(ht_p->data_strge_p[hash_key_p->value]))) {
         ERR_SET_OUT(err, EINVAL);
         return err;
     }
 
-    if ((ht->delData(ht->data_strge_p[hash_key].mem_slot_p)) < 0) {
+    if ((ht_p->delData(ht_p->data_strge_p[hash_key_p->value].mem_slot_p)) < 0) {
         ERR_SET_OUT(err, EINVAL);
     } else {
         /* TODO: Need to Chaing code */
-        ht->data_strge_p[hash_key].mem_slot_p = NULL;
+        ht_p->data_strge_p[hash_key_p->value].mem_slot_p = NULL;
     }
 
     return err;
 }
 
-static void **HashTableGet_Func(HashTable *ht, int key_val)
+static void **HashTableGet_Func(HashTable *ht_p, HashKey hash_key)
 {
     TR_FUNC(TRACE);
 
     int err = 0;
     void **ret = NULL;
 
-    if (!(ht) || key_val < 0 || key_val > TABLE_SIZE) {
+    if (!(ht_p) || hash_key.value < 0 || hash_key.value > TABLE_SIZE) {
         ERR_SET_OUT(err, EINVAL);
         return NULL;
     }
 
-    if (!(ret = &(ht->data_strge_p[key_val].mem_slot_p)) 
-                || !(ht->data_strge_p[key_val].mem_slot_p)) {
+    if (!(ret = &(ht_p->data_strge_p[hash_key.value].mem_slot_p)) 
+                || !(ht_p->data_strge_p[has_key.value].mem_slot_p)) {
         ERR_SET_OUT(err, EINVAL);
     }
 
     return ret;
 }
 
-static int HashKey_Func(HashTable *ht, int val)
+static int HashKey_Func(HashTable *ht_p, int val)
 {
     TR_FUNC(TRACE);
 
