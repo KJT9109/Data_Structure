@@ -13,30 +13,33 @@
 
 #define TRACE 0
 
-static HashKey *HashTableInsert_Func(HashTable *ht_p, void *data_p)
+static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
 {
     TR_FUNC(TRACE);
 
-    int err = 0;
     int key_src;
     HashKey hash_key;
 
     if (!(ht_p) || !(data_p)) {
-        ERR_SET_OUT(err, ENOMEM);
-        return -err;
+        ERR_OUT(ENOMEM);
+        hash_key.value = -ENOMEM;
+        return hash_key;
     }
     /* get resource for make hash key */
-    if ((hash_key.value = ht_p->keySrc(data_p)) < 0) {
-        ERR_SET_OUT(err, EINVAL);
-        return -err;
+    if ((key_src = ht_p->keySrc(data_p)) < 0) {
+        ERR_OUT(EINVAL);
+        hash_key.value = -EINVAL;
+        return hash_key;
         /* get Hash Key */
     } else if ((hash_key.value = ht_p->makeKey(ht_p, key_src)) < 0) {
-        ERR_SET_OUT(err, EINVAL);
-        return -err;
+        ERR_OUT(EINVAL);
+        hash_key.value = -EINVAL;
+        return hash_key;
     } else {
         if (!(&(ht_p->data_strge_p[hash_key.value]))) {
-            ERR_SET_OUT(err, EINVAL);
-            return -err;
+            ERR_OUT(EINVAL);
+            hash_key.value = -EINVAL;
+            return hash_key;
         } else if (!(ht_p->data_strge_p[hash_key.value].mem_slot_p)) {
             /* Insert Data */
             ht_p->data_strge_p[hash_key.value].mem_slot_p = data_p;
@@ -48,22 +51,22 @@ static HashKey *HashTableInsert_Func(HashTable *ht_p, void *data_p)
     return hash_key;
 }
 
-static int HashTableDel_Func(HashTable *ht_p, HashKey *hash_key_p)
+static int HashTableDel_Func(HashTable *ht_p, HashKey hash_key_p)
 {
     TR_FUNC(TRACE);
 
     int err = 0;
 
-    if (!(ht_p) || !(&(ht_p->data_strge_p[hash_key_p->value]))) {
+    if (!(ht_p) || !(&(ht_p->data_strge_p[hash_key_p.value]))) {
         ERR_SET_OUT(err, EINVAL);
         return err;
     }
 
-    if ((ht_p->delData(ht_p->data_strge_p[hash_key_p->value].mem_slot_p)) < 0) {
+    if ((ht_p->delData(ht_p->data_strge_p[hash_key_p.value].mem_slot_p)) < 0) {
         ERR_SET_OUT(err, EINVAL);
     } else {
         /* TODO: Need to Chaing code */
-        ht_p->data_strge_p[hash_key_p->value].mem_slot_p = NULL;
+        ht_p->data_strge_p[hash_key_p.value].mem_slot_p = NULL;
     }
 
     return err;
@@ -82,7 +85,7 @@ static void **HashTableGet_Func(HashTable *ht_p, HashKey hash_key)
     }
 
     if (!(ret = &(ht_p->data_strge_p[hash_key.value].mem_slot_p)) 
-                || !(ht_p->data_strge_p[has_key.value].mem_slot_p)) {
+                || !(ht_p->data_strge_p[hash_key.value].mem_slot_p)) {
         ERR_SET_OUT(err, EINVAL);
     }
 

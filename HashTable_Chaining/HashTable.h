@@ -22,8 +22,8 @@ typedef struct _hashTable
     /* == hash table member == */
     Storage *data_strge_p;
     /* == hash table work func == */
-    HashKey *(*insert)(struct _hashTable *ht, void *data_p);
-    int (*remove)(struct _hashTable *ht, HashKey *key_val);
+    HashKey (*insert)(struct _hashTable *ht, void *data_p);
+    int (*remove)(struct _hashTable *ht, HashKey key_val);
     void **(*get)(struct _hashTable *ht, HashKey key_val);
     /* == hash table make key func == */
     int (*makeKey)(struct _hashTable *ht, int val);

@@ -25,20 +25,30 @@ int main(void)
 
     personBook = HashTableInit(Person_keyData, Person_del);
 
-    personBook->insert(personBook, (void *)hyojin);
-    personBook->insert(personBook, (void *)jitae);
-    personBook->insert(personBook, (void *)seokha);
-    personBook->insert(personBook, (void *)okhee);
-    personBook->insert(personBook, (void *)suyun);
+    HashKey k_1 = personBook->insert(personBook, (void *)hyojin);
+    HashKey k_2 = personBook->insert(personBook, (void *)jitae);
+    HashKey k_3 = personBook->insert(personBook, (void *)seokha);
+    HashKey k_4 = personBook->insert(personBook, (void *)okhee);
+    HashKey k_5 = personBook->insert(personBook, (void *)suyun);
 
-    Person *key_61 = *(Person **)personBook->get(personBook, 61);
-    Person *key_72 = *(Person **)personBook->get(personBook, 72);
+    Person *key_1 = *(Person **)personBook->get(personBook, k_1);
+    Person *key_2 = *(Person **)personBook->get(personBook, k_2);
 
-    printf("key_61: Name :%s , Number: %s, height: %d \r\n", key_61->name, key_61->phone, key_61->height);
-    printf("key_72: Name :%s , Number: %s, height: %d \r\n", key_72->name, key_72->phone, key_72->height);
+    printf("key_1: Name :%s , Number: %s, height: %d \r\n", key_1->name, key_1->phone, key_1->height);
+    printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height);
 
-    personBook->remove(personBook, 72);
-    key_72 = *(Person **)personBook->get(personBook, 72);
+    personBook->remove(personBook, k_1);
+    
+    key_2 = *(Person **)personBook->get(personBook, k_1);
+    key_2 ? printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height) : printf("none \r\n");
+    key_2 = *(Person **)personBook->get(personBook, k_2);
+    key_2 ? printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height) : printf("none \r\n");
+    key_2 = *(Person **)personBook->get(personBook, k_3);
+    key_2 ? printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height) : printf("none \r\n");
+    key_2 = *(Person **)personBook->get(personBook, k_4);
+    key_2 ? printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height) : printf("none \r\n");
+    key_2 = *(Person **)personBook->get(personBook, k_5);
+    key_2 ? printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height) : printf("none \r\n");
 
     printf("End HashTable Program \r\n");
 
