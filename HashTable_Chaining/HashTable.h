@@ -14,15 +14,16 @@ typedef struct _hashKey
 typedef struct _storage
 {
     void *mem_slot_p;
-    struct _dataList *next;
+    struct _storage *next_p;
 } Storage;
 
 typedef struct _hashTable
 {
     /* == hash table member == */
-    Storage *data_strge_p;
+    Storage **data_strge_pp;
     /* == hash table work func == */
     HashKey (*insert)(struct _hashTable *ht, void *data_p);
+    Storage *(*strMalloc)();
     int (*remove)(struct _hashTable *ht, HashKey key_val);
     void **(*get)(struct _hashTable *ht, HashKey key_val);
     /* == hash table make key func == */

@@ -18,7 +18,8 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
     TR_FUNC(TRACE);
 
     int key_src;
-    HashKey hash_key;
+    HashKey hash_key = {0,};
+    Storage *local_str_p = NULL;
 
     if (!(ht_p) || !(data_p)) {
         ERR_OUT(ENOMEM);
@@ -36,15 +37,31 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
         hash_key.value = -EINVAL;
         return hash_key;
     } else {
-        if (!(&(ht_p->data_strge_p[hash_key.value]))) {
+        if (!(&(ht_p->data_strge_pp[hash_key.value]))) {
             ERR_OUT(EINVAL);
             hash_key.value = -EINVAL;
             return hash_key;
-        } else if (!(ht_p->data_strge_p[hash_key.value].mem_slot_p)) {
+        } else if (!(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) {
             /* Insert Data */
-            ht_p->data_strge_p[hash_key.value].mem_slot_p = data_p;
+            ht_p->data_strge_pp[hash_key.value]->mem_slot_p = data_p;
         } else {
-            /* TODO: need to Chaining code */
+            /* Check Next slot */
+            local_str_p = ht_p->data_strge_pp[hash_key.value];
+            while (local_str_p->next_p != NULL) {
+                local_str_p = local_str_p->next_p;
+                hash_key.index++;
+            }
+            /* Insert Data */
+            local_str_p->next_p = ht_p->strMalloc();
+            if (local_str_p->next_p < 0) {
+                ERR_OUT(ENOMEM);
+                hash_key.value = -ENOMEM;
+                return  hash_key;
+            } else {
+                local_str_p = local_str_p->next_p;
+                local_str_p->mem_slot_p = data_p;
+                printf("Hash Key Index :%d \r\n" ,hash_key.index);
+            }
         }
     }
 
@@ -57,16 +74,16 @@ static int HashTableDel_Func(HashTable *ht_p, HashKey hash_key_p)
 
     int err = 0;
 
-    if (!(ht_p) || !(&(ht_p->data_strge_p[hash_key_p.value]))) {
+    if (!(ht_p) || !(&(ht_p->data_strge_pp[hash_key_p.value]))) {
         ERR_SET_OUT(err, EINVAL);
         return err;
     }
 
-    if ((ht_p->delData(ht_p->data_strge_p[hash_key_p.value].mem_slot_p)) < 0) {
+    if ((ht_p->delData(ht_p->data_strge_pp[hash_key_p.value]->mem_slot_p)) < 0) {
         ERR_SET_OUT(err, EINVAL);
     } else {
         /* TODO: Need to Chaing code */
-        ht_p->data_strge_p[hash_key_p.value].mem_slot_p = NULL;
+        ht_p->data_strge_pp[hash_key_p.value]->mem_slot_p = NULL;
     }
 
     return err;
@@ -84,8 +101,8 @@ static void **HashTableGet_Func(HashTable *ht_p, HashKey hash_key)
         return NULL;
     }
 
-    if (!(ret = &(ht_p->data_strge_p[hash_key.value].mem_slot_p)) 
-                || !(ht_p->data_strge_p[hash_key.value].mem_slot_p)) {
+    if (!(ret = &(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) 
+                || !(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) {
         ERR_SET_OUT(err, EINVAL);
     }
 
@@ -99,18 +116,37 @@ static int HashKey_Func(HashTable *ht_p, int val)
     return val % 100;
 }
 
+static Storage *HashTableStrMalloc_Func()
+{
+    TR_FUNC(TRACE);
+
+    Storage *ret = (Storage *)calloc(1, sizeof(Storage));
+
+    if (ret < 0 || ret == NULL) {
+        ERR_OUT(ENOMEM);
+    }
+
+    return ret;
+}
+
 HashTable *HashTableInit(int (*getSrc_func)(void *arg_p), 
         int (*delData_func)(void *arg_p))
 {
     TR_FUNC(TRACE);
 
     HashTable *ret = (HashTable *)malloc(sizeof(HashTable));
-    ret->data_strge_p = (Storage *)calloc(TABLE_SIZE, sizeof(Storage));
+    ret->data_strge_pp = (Storage **)calloc(TABLE_SIZE, sizeof(Storage *));
+
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        ret->data_strge_pp[i] = (Storage *)calloc(1, sizeof(Storage));
+    }
 
     /* Hash Table Work Func */
     ret->insert = HashTableInsert_Func;
     ret->remove = HashTableDel_Func;
     ret->get = HashTableGet_Func;
+    ret->strMalloc = HashTableStrMalloc_Func;
+    /* hash table make key func */
     ret->makeKey = HashKey_Func;
     /* member Struct Func */
     ret->keySrc = getSrc_func;
@@ -118,4 +154,6 @@ HashTable *HashTableInit(int (*getSrc_func)(void *arg_p),
 
     return ret;
 }
+
+
 
