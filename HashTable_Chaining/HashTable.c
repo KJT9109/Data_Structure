@@ -58,9 +58,10 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
                 hash_key.value = -ENOMEM;
                 return  hash_key;
             } else {
+                hash_key.index++;
                 local_str_p = local_str_p->next_p;
                 local_str_p->mem_slot_p = data_p;
-                printf("Hash Key Index :%d \r\n" ,hash_key.index);
+                printf("Hash Key Index :%d \r\n", hash_key.index);
             }
         }
     }
