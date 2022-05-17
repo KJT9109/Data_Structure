@@ -25,7 +25,7 @@ typedef struct _hashTable
     HashKey (*insert)(struct _hashTable *ht, void *data_p);
     Storage *(*strMalloc)();
     int (*remove)(struct _hashTable *ht, HashKey key_val);
-    void **(*get)(struct _hashTable *ht, HashKey key_val);
+    void *(*get)(struct _hashTable *ht, HashKey key_val);
     /* == hash table make key func == */
     int (*makeKey)(struct _hashTable *ht, int val);
     /* == hash table member struct func == */

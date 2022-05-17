@@ -90,24 +90,29 @@ static int HashTableDel_Func(HashTable *ht_p, HashKey hash_key_p)
     return err;
 }
 
-static void **HashTableGet_Func(HashTable *ht_p, HashKey hash_key)
+static void *HashTableGet_Func(HashTable *ht_p, HashKey hash_key)
 {
     TR_FUNC(TRACE);
 
-    int err = 0;
-    void **ret = NULL;
+    Storage *local_str_p = NULL;
 
     if (!(ht_p) || hash_key.value < 0 || hash_key.value > TABLE_SIZE) {
-        ERR_SET_OUT(err, EINVAL);
+        ERR_OUT(EINVAL);
         return NULL;
     }
 
-    if (!(ret = &(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) 
-                || !(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) {
-        ERR_SET_OUT(err, EINVAL);
+    local_str_p = ht_p->data_strge_pp[hash_key.value];
+
+    for (int i = 0; i < hash_key.index; i++) {
+        if (local_str_p->next_p) {
+            local_str_p = local_str_p->next_p;
+        } else {
+            ERR_OUT(ENOMEM);
+            return NULL;
+        }
     }
 
-    return ret;
+    return local_str_p->mem_slot_p;
 }
 
 static int HashKey_Func(HashTable *ht_p, int val)
