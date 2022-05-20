@@ -3,7 +3,6 @@
 
 #define TABLE_SIZE 100
 
-/* TODO: Change Hash Key */ 
 typedef struct _hashKey
 {
     int value;
@@ -15,6 +14,7 @@ typedef struct _storage
 {
     void *mem_slot_p;
     struct _storage *next_p;
+
 } Storage;
 
 typedef struct _hashTable

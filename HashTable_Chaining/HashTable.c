@@ -69,22 +69,37 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
     return hash_key;
 }
 
-static int HashTableDel_Func(HashTable *ht_p, HashKey hash_key_p)
+static int HashTableDel_Func(HashTable *ht_p, HashKey hash_key)
 {
     TR_FUNC(TRACE);
 
     int err = 0;
+    Storage *local_str_p = NULL;
 
-    if (!(ht_p) || !(&(ht_p->data_strge_pp[hash_key_p.value]))) {
+    if (!(ht_p) || !(&(ht_p->data_strge_pp[hash_key.value]))) {
         ERR_SET_OUT(err, EINVAL);
         return err;
     }
 
-    if ((ht_p->delData(ht_p->data_strge_pp[hash_key_p.value]->mem_slot_p)) < 0) {
-        ERR_SET_OUT(err, EINVAL);
+    if (hash_key.index == 0 ) {
+        /* == Delete data == */
+        if ((ht_p->delData(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) < 0) {
+            ERR_SET_OUT(err, EINVAL);
+        } else {
+            ht_p->data_strge_pp[hash_key.value]->mem_slot_p = NULL;
+        }
     } else {
-        /* TODO: Need to Chaing code */
-        ht_p->data_strge_pp[hash_key_p.value]->mem_slot_p = NULL;
+        /* == get Slot HashKey + index == */
+        local_str_p = ht_p->data_strge_pp[hash_key.value];
+        for (int i = 0; i < hash_key.index; i++) {
+            local_str_p = local_str_p->next_p;
+        }
+        /* == Delete data == */
+        if ((ht_p->delData(local_str_p->mem_slot_p)) < 0) {
+            ERR_SET_OUT(err, EINVAL);
+        } else {
+            local_str_p->mem_slot_p = NULL;
+        }
     }
 
     return err;

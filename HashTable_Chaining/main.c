@@ -47,6 +47,11 @@ int main(void)
     key_5 = (Person *)personBook->get(personBook, k_5);
     key_5 ? printf("key_5: Name :%s , Number: %s, height: %d \r\n", key_5->name, key_5->phone, key_5->height) : printf("none \r\n");
 
+    personBook->remove(personBook, k_2);
+
+    key_2 = (Person *)personBook->get(personBook, k_2);
+    key_2 ? printf("key_2: Name :%s , Number: %s, height: %d \r\n", key_2->name, key_2->phone, key_2->height) : printf("none \r\n");
+
     printf("End HashTable Program \r\n");
 
     return 0;
