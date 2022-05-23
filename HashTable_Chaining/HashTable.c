@@ -47,21 +47,25 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
         } else {
             /* Check Next slot */
             local_str_p = ht_p->data_strge_pp[hash_key.value];
-            while (local_str_p->next_p != NULL) {
+            while (local_str_p->next_p != NULL && local_str_p->mem_slot_p != NULL) {
                 local_str_p = local_str_p->next_p;
                 hash_key.index++;
             }
-            /* Insert Data */
-            local_str_p->next_p = ht_p->strMalloc();
-            if (local_str_p->next_p < 0) {
-                ERR_OUT(ENOMEM);
-                hash_key.value = -ENOMEM;
-                return  hash_key;
-            } else {
-                hash_key.index++;
-                local_str_p = local_str_p->next_p;
+            if (local_str_p->mem_slot_p == NULL) {
+                /* Delete Slot insert Data */
                 local_str_p->mem_slot_p = data_p;
-                printf("Hash Key Index :%d \r\n", hash_key.index);
+            } else {
+                /* Insert new Slot */
+                local_str_p->next_p = ht_p->strMalloc();
+                if (local_str_p->next_p < 0) {
+                    ERR_OUT(ENOMEM);
+                    hash_key.value = -ENOMEM;
+                    return  hash_key;
+                } else {
+                    hash_key.index++;
+                    local_str_p = local_str_p->next_p;
+                    local_str_p->mem_slot_p = data_p;
+                }
             }
         }
     }
