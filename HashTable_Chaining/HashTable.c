@@ -26,12 +26,12 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
         hash_key.value = -ENOMEM;
         return hash_key;
     }
-    /* get resource for make hash key */
+    /* == get resource for make hash key == */
     if ((key_src = ht_p->keySrc(data_p)) < 0) {
         ERR_OUT(EINVAL);
         hash_key.value = -EINVAL;
         return hash_key;
-        /* get Hash Key */
+        /* == get Hash Key == */
     } else if ((hash_key.value = ht_p->makeKey(ht_p, key_src)) < 0) {
         ERR_OUT(EINVAL);
         hash_key.value = -EINVAL;
@@ -42,20 +42,20 @@ static HashKey HashTableInsert_Func(HashTable *ht_p, void *data_p)
             hash_key.value = -EINVAL;
             return hash_key;
         } else if (!(ht_p->data_strge_pp[hash_key.value]->mem_slot_p)) {
-            /* Insert Data */
+            /* == Insert Data == */
             ht_p->data_strge_pp[hash_key.value]->mem_slot_p = data_p;
         } else {
-            /* Check Next slot */
+            /* == Check Next slot == */
             local_str_p = ht_p->data_strge_pp[hash_key.value];
             while (local_str_p->next_p != NULL && local_str_p->mem_slot_p != NULL) {
                 local_str_p = local_str_p->next_p;
                 hash_key.index++;
             }
             if (local_str_p->mem_slot_p == NULL) {
-                /* Delete Slot insert Data */
+                /* ==  Insert data to the deleted slot == */
                 local_str_p->mem_slot_p = data_p;
             } else {
-                /* Insert new Slot */
+                /* == Insert new Slot == */
                 local_str_p->next_p = ht_p->strMalloc();
                 if (local_str_p->next_p < 0) {
                     ERR_OUT(ENOMEM);
